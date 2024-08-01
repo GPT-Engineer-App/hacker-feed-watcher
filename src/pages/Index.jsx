@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const fetchRSS = async (url) => {
-  const response = await fetch(url);
+  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+  const response = await fetch(corsProxy + url);
   const text = await response.text();
   return new Promise((resolve, reject) => {
     parseString(text, (err, result) => {
@@ -40,13 +41,13 @@ const Index = () => {
 
   const { data: postsData, isLoading: postsLoading, error: postsError } = useQuery({
     queryKey: ['hnPosts'],
-    queryFn: () => fetchRSS('https://hnrss.org/newest'),
+    queryFn: () => fetchRSS('https://hnrss.org/newest?count=30'),
     refetchInterval: 60000, // Refetch every minute
   });
 
   const { data: commentsData, isLoading: commentsLoading, error: commentsError } = useQuery({
     queryKey: ['hnComments'],
-    queryFn: () => fetchRSS('https://hnrss.org/newcomments'),
+    queryFn: () => fetchRSS('https://hnrss.org/newcomments?count=30'),
     refetchInterval: 60000, // Refetch every minute
   });
 
